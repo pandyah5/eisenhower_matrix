@@ -5,7 +5,7 @@
 function add_item () {
 	let taskname = document.getElementById("taskname").value;
 	document.getElementById("To_do_list").innerHTML += ('<li id="'+ taskname +'">' + taskname);
-	document.getElementById("To_do_list").innerHTML += ('<button class="btn_'+taskname+'" type="button" onclick="delete_item(\'' + taskname + '\')">X</button> </li>');
+	document.getElementById("To_do_list").innerHTML += ('<button id="btn_'+taskname+'" type="button" onclick="delete_item(\'' + taskname + '\')">X</button> </li>');
 	return 1;
 }
 
@@ -13,7 +13,8 @@ function delete_item(taskname) {
 	console.log("Trying to delete: " + taskname);
 	let elem = document.getElementById(taskname);
 	elem.parentNode.removeChild(elem);
-	document.getElementById("btn_"+taskname).style.display = "none";
+	// document.getElementById("btn_"+taskname).style.display = "none";
+	document.getElementById("btn_"+taskname).remove();
 	return;
 }
 </script>
