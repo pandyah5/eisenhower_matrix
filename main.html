@@ -13,7 +13,6 @@ function delete_item(taskname) {
 	console.log("Trying to delete: " + taskname);
 	let elem = document.getElementById(taskname);
 	elem.parentNode.removeChild(elem);
-	// document.getElementById("btn_"+taskname).style.display = "none";
 	document.getElementById("btn_"+taskname).remove();
 	return;
 }
@@ -24,8 +23,18 @@ function delete_item(taskname) {
 <body>
 <h1> This is an Eisenhower inspired to-do list! </h1>
 
+<!-- Get the taskname -->
 <label for="taskname">Item:</label>
-<input type="text" id="taskname" name="taskname" minlength="1" maxlength="20" required>
+<input type="text" value = "e.g. Water the plants" id="taskname" name="taskname" minlength="1" maxlength="20" required>
+
+<!-- Get the urgency -->
+<label for="urgency">Urgency:</label>
+<input type="number" id="urgency" name="urgency" minlength="1" maxlength="20" required>
+
+<!-- Get the importance -->
+<label for="importance">Importance:</label>
+<input type="number" id="importance" name="importance" minlength="1" maxlength="20" required>
+
 <button type="button" onclick="add_item()">Add item!</button>
 
 <p> Your to-do list: </p> 
