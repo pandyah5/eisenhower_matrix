@@ -1,1 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+function add_item () {
+	document.getElementById("To_do_list").innerHTML += ('<li>' + ' Learn JS '+ '</li>');
+	return 1;
+}
+</script>
+</head>
 
+
+<body>
+<h1> This is an Eisenhower inspired to-do list! </h1>
+
+<button type="button" onclick="add_item()">Add item!</button>
+
+<ul id="To_do_list">
+<li> Nothing yet </li>
+</ul>
+
+<p> Created by your beloved HP </p>
+</body>
+</html>
