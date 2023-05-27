@@ -56,12 +56,31 @@ function update_eisenhower_matrix () {
 	// Extract the plot points and labels from data
 	let plot_data = [];
 	let plot_labels = [];
+	let plot_colors = [];
 	for (const[key, value] of data) {
 		plot_labels.push(key);
 		plot_data.push(value);
+		
+		// We will color code each quadrant
+		if (value.x < 0 && value.y > 0) {
+			plot_colors.push("rgba(0,0,150,1)");     // Blue
+		}
+		else if (value.x > 0 && value.y > 0) {
+			plot_colors.push("rgba(240,160,13,1)");  // Orange
+		}
+		else if (value.x < 0 && value.y < 0) {
+			plot_colors.push("rgba(0,150,0,1)");     // Green
+		}
+		else if (value.x > 0 && value.y < 0) {
+			plot_colors.push("rgba(150,0,0,1)");     // Red
+		}
+		else {
+			plot_colors.push("rgba(70,70,60,1)");    // Gray
+		}
 	}
 	
 	// Get the chart and edit the values
+	myChart.data.datasets[0].pointBackgroundColor = plot_colors;
 	myChart.data.datasets[0].labels = plot_labels;
 	myChart.data.datasets[0].data = plot_data;
 	
@@ -118,7 +137,7 @@ function change_matrix_state() {
 			datasets: [{
 				pointRadius: 4,
 				pointBackgroundColor: "rgba(0,0,255,1)",
-				label: 'Legend',
+				label: 'Tasks',
 				labels: [],
 				data: []
 			}]
