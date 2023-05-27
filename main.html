@@ -65,13 +65,27 @@ function plot_eisenhower_matrix() {
 	  data: {datasets: [{
 			  pointRadius: 4,
 			  pointBackgroundColor: "rgba(0,0,255,1)",
-			  data: data.values
+			  data: plot_data
 			}]
 		},
 	  options: {
 			title: {
 				display: true,
 				text: 'Eisenhower Matrix'
+			},
+			scales: {
+				yAxes: [{
+					ticks: {
+						max: 5,
+						min: -5
+					}
+				}],
+				xAxes: [{
+					ticks: {
+						max: 5,
+						min: -5
+					}
+				}]
 			}
 		}
 	});
