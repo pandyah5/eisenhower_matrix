@@ -62,12 +62,8 @@ function update_eisenhower_matrix () {
 	}
 	
 	// Get the chart and edit the values
-	myChart.data.labels = plot_labels;
+	myChart.data.datasets[0].labels = plot_labels;
 	myChart.data.datasets[0].data = plot_data;
-	
-	for (const elem of myChart.data.labels) {
-		console.log("Label: " + elem);
-	}
 	
 	// Update the chart
 	myChart.update();
@@ -119,21 +115,23 @@ function change_matrix_state() {
 	var myChart = new Chart(ctx, {
 	  type: "scatter",
 	  data: {
-			labels: [],
 			datasets: [{
 				pointRadius: 4,
 				pointBackgroundColor: "rgba(0,0,255,1)",
 				label: 'Legend',
+				labels: [],
 				data: []
 			}]
 		},
 	  options: {
-			tooltips: {
-				// For displaying legends when we hover over it 
-				callbacks: {
-					label: function(tooltipItem, data) {
-					   var label = data.labels[tooltipItem.index];
-					   return label + ': (' + tooltipItem.xLabel + ', ' + tooltipItem.yLabel + ')';
+			plugins: {
+				tooltip: {
+					callbacks: {
+						label: function(ctx) {
+							let label = ctx.dataset.labels[ctx.dataIndex];
+							label += " (" + ctx.parsed.x + ", " + ctx.parsed.y + ")";
+							return label;
+						}
 					}
 				}
 			},
@@ -159,9 +157,7 @@ function change_matrix_state() {
 		}
 	});
 	</script>
-</div> 
-
-<button id="matrix_mode_toggle_btn" type="button" onclick="change_matrix_state()">Show Matrix</button>
+</div>
 
 <p id="credits"> Created by your beloved HP </p>
 </body>
