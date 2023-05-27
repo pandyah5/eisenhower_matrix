@@ -2,20 +2,44 @@
 <html>
 <head>
 <script>
+// The variable to store the urgency and importance points
+let data = new Map();
+
+// Function to add the task item supplied by the user
 function add_item () {
 	let taskname = document.getElementById("taskname").value;
 	document.getElementById("To_do_list").innerHTML += ('<li id="'+ taskname +'">' + taskname);
 	document.getElementById("To_do_list").innerHTML += ('<button id="btn_'+taskname+'" type="button" onclick="delete_item(\'' + taskname + '\')">X</button> </li>');
-	return 1;
-}
-
-function delete_item(taskname) {
-	console.log("Trying to delete: " + taskname);
-	let elem = document.getElementById(taskname);
-	elem.parentNode.removeChild(elem);
-	document.getElementById("btn_"+taskname).remove();
+	
+	// Add the task to the data hashmap
+	let urgency = document.getElementById("urgency").value;
+	let importance = document.getElementById("importance").value;
+	data.set(taskname, [urgency, importance]);
+	
+	// For debug let us print all elements of data
+	for (const [key, value] of data) {
+		console.log(key + " is mapped to: " + value[0] + ", " + value[1]);
+	}
 	return;
 }
+
+// Function to delete the task item when the "X" button is clicked
+function delete_item(taskname) {
+	// Debug statement for the browser
+	console.log("Trying to delete: " + taskname);
+	
+	// Delete the text entry
+	let elem = document.getElementById(taskname);
+	elem.parentNode.removeChild(elem);
+
+	// Delete the "X" button associated with it
+	document.getElementById("btn_"+taskname).remove();
+	
+	// Delete the entry from the data hashmap
+	data.delete(taskname);
+	return;
+}
+
 </script>
 </head>
 
@@ -40,6 +64,8 @@ function delete_item(taskname) {
 <p> Your to-do list: </p> 
 <ul id="To_do_list">
 </ul>
+
+<div id="einsenhower"></div> 
 
 <p id="credits"> Created by your beloved HP </p>
 </body>
