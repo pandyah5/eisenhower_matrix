@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"> </script> <!-- Importing Chart.js for plotting matrices -->
+
+<!-- Importing Chart.js for plotting matrices -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.0/chart.js"></script>
 
 <script>
 
@@ -10,11 +12,12 @@ let data = new Map();
 
 // Function to add the task item supplied by the user
 function add_item () {
+	// Create an entry for the new task on the list
 	let taskname = document.getElementById("taskname").value;
 	document.getElementById("To_do_list").innerHTML += ('<li id="'+ taskname +'">' + taskname);
 	document.getElementById("To_do_list").innerHTML += ('<button id="btn_'+taskname+'" type="button" onclick="delete_item(\'' + taskname + '\')">X</button> </li>');
 	
-	// Add the task to the data hashmap
+	// Add the task to the data hashmap with its U and I params
 	let urgency = document.getElementById("urgency").value;
 	let importance = document.getElementById("importance").value;
 	let scatter_point = {x: urgency, y: importance};
@@ -26,16 +29,13 @@ function add_item () {
 	}
 	
 	// Update the eisenhower matrix
-	plot_eisenhower_matrix();
+	update_eisenhower_matrix();
 
 	return;
 }
 
 // Function to delete the task item when the "X" button is clicked
 function delete_item(taskname) {
-	// Debug statement for the browser
-	console.log("Trying to delete: " + taskname);
-	
 	// Delete the text entry
 	let elem = document.getElementById(taskname);
 	elem.parentNode.removeChild(elem);
@@ -47,12 +47,12 @@ function delete_item(taskname) {
 	data.delete(taskname);
 	
 	// Update the eisenhower matrix
-	plot_eisenhower_matrix();
+	update_eisenhower_matrix();
 
 	return;
 }
 
-function plot_eisenhower_matrix() {
+function update_eisenhower_matrix () {
 	// Extract the plot points and labels from data
 	let plot_data = [];
 	let plot_labels = [];
@@ -61,57 +61,28 @@ function plot_eisenhower_matrix() {
 		plot_data.push(value);
 	}
 	
-	// For debug let us print all labels
-	for (const key of plot_labels) {
-		console.log("Label: " + key);
+	// Get the chart and edit the values
+	myChart.data.labels = plot_labels;
+	myChart.data.datasets[0].data = plot_data;
+	
+	for (const elem of myChart.data.labels) {
+		console.log("Label: " + elem);
 	}
+	
+	// Update the chart
+	myChart.update();
+}
 
-	// Configure the chart
-	const myChart = new Chart("matrix", {
-	  type: "scatter",
-	  data: {
-			labels: plot_labels,
-			datasets: [{
-				pointRadius: 4,
-				pointBackgroundColor: "rgba(0,0,255,1)",
-				label: 'Legend',
-				data: plot_data
-			}]
-		},
-	  options: {
-			tooltips: {
-				callbacks: {
-					label: function(tooltipItem, data) {
-					   var label = data.labels[tooltipItem.index];
-					   return label + ': (' + tooltipItem.xLabel + ', ' + tooltipItem.yLabel + ')';
-					}
-				}
-			},
-			title: {
-				display: true,
-				text: 'Eisenhower Matrix'
-			},
-			scales: {
-				yAxes: [{
-					ticks: {
-						max: 5,
-						min: -5
-					}
-				}],
-				xAxes: [{
-					ticks: {
-						max: 5,
-						min: -5
-					}
-				}]
-			},
-			elements: {
-				point: {
-					pointStyle: 'circle'
-				}
-			}
-		}
-	});
+function change_matrix_state() {
+	let elem = document.getElementById('matrix_mode_toggle_btn');
+	let txt = elem.textContent;
+	
+	if (txt == 'Show Matrix') {
+		elem.textContent = 'Hide Matrix';
+	}
+	else {
+		elem.textContent = 'Show Matrix';
+	}
 }
 
 </script>
@@ -141,7 +112,56 @@ function plot_eisenhower_matrix() {
 
 <div id="einsenhower">
 	<canvas id="matrix" style="width:100%;max-width:700px"></canvas>
+	<script>
+	var ctx = document.getElementById('matrix').getContext("2d");
+	
+	// Configure the chart, Note: Needs to be after the canvas tag!
+	var myChart = new Chart(ctx, {
+	  type: "scatter",
+	  data: {
+			labels: [],
+			datasets: [{
+				pointRadius: 4,
+				pointBackgroundColor: "rgba(0,0,255,1)",
+				label: 'Legend',
+				data: []
+			}]
+		},
+	  options: {
+			tooltips: {
+				// For displaying legends when we hover over it 
+				callbacks: {
+					label: function(tooltipItem, data) {
+					   var label = data.labels[tooltipItem.index];
+					   return label + ': (' + tooltipItem.xLabel + ', ' + tooltipItem.yLabel + ')';
+					}
+				}
+			},
+			title: {
+				display: true,
+				text: 'Eisenhower Matrix'
+			},
+			scales: {
+				y: {
+					min: -5,
+					max: 5
+				},
+				x: {
+					min: -5,
+					max: 5
+				}
+			},
+			elements: {
+				point: {
+					pointStyle: 'circle'
+				}
+			}
+		}
+	});
+	</script>
 </div> 
+
+<button id="matrix_mode_toggle_btn" type="button" onclick="change_matrix_state()">Show Matrix</button>
 
 <p id="credits"> Created by your beloved HP </p>
 </body>
