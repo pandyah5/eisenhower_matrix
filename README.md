@@ -8,3 +8,4 @@ Goals:
 * [x] Learn to take user inputs and process them using JS
 * [x] Learn to make graphs using Chart.js (Version 3.9.0)
 * [x] Update graphs based on User inputs
+* [x] Revise some CSS by beautifying the webpage
