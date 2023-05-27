@@ -1,0 +1,22 @@
+html {
+  background-image: url("./images/bg1.jpg");
+  background-size: 100vw 170vh;
+  color: white;
+}
+
+#credits {
+	text-align: left, bottom;
+	color: white;
+	font-size: 12px;
+}
+
+#To_do_list li {
+	display:inline;
+	font-size: 12px;
+}
+
+.cancel {
+	font-size: 10px;
+	padding: 1px;
+	margin-left: 5px;
+}

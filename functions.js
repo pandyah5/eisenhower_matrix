@@ -6,7 +6,7 @@ function add_item () {
 	// Create an entry for the new task on the list
 	let taskname = document.getElementById("taskname").value;
 	document.getElementById("To_do_list").innerHTML += ('<li id="'+ taskname +'">' + taskname);
-	document.getElementById("To_do_list").innerHTML += ('<button id="btn_'+taskname+'" type="button" onclick="delete_item(\'' + taskname + '\')">X</button> </li>');
+	document.getElementById("To_do_list").innerHTML += ('<button id="btn_'+taskname+'" class="cancel" type="button" onclick="delete_item(\'' + taskname + '\')">X</button> </li>');
 	
 	// Add the task to the data hashmap with its U and I params
 	let urgency = document.getElementById("urgency").value;
