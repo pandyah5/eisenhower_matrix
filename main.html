@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"> </script> <!-- Importing Chart.js for plotting matrices -->
+
 <script>
+
 // The variable to store the urgency and importance points
 let data = new Map();
 
@@ -14,12 +17,17 @@ function add_item () {
 	// Add the task to the data hashmap
 	let urgency = document.getElementById("urgency").value;
 	let importance = document.getElementById("importance").value;
-	data.set(taskname, [urgency, importance]);
+	let scatter_point = {x: urgency, y: importance};
+	data.set(taskname, scatter_point);
 	
 	// For debug let us print all elements of data
 	for (const [key, value] of data) {
-		console.log(key + " is mapped to: " + value[0] + ", " + value[1]);
+		console.log(key + " is mapped to: " + value.x + ", " + value.y);
 	}
+	
+	// Update the eisenhower matrix
+	plot_eisenhower_matrix();
+
 	return;
 }
 
@@ -33,11 +41,40 @@ function delete_item(taskname) {
 	elem.parentNode.removeChild(elem);
 
 	// Delete the "X" button associated with it
-	document.getElementById("btn_"+taskname).remove();
+	document.getElementById("btn_" + taskname).remove();
 	
 	// Delete the entry from the data hashmap
 	data.delete(taskname);
+	
+	// Update the eisenhower matrix
+	plot_eisenhower_matrix();
+
 	return;
+}
+
+function plot_eisenhower_matrix() {
+	// Extract the plot points from data
+	let plot_data = [];
+	for (const[key, value] of data) {
+		plot_data.push(value);
+	}
+
+	// Configure the chart
+	const myChart = new Chart("matrix", {
+	  type: "scatter",
+	  data: {datasets: [{
+			  pointRadius: 4,
+			  pointBackgroundColor: "rgba(0,0,255,1)",
+			  data: data.values
+			}]
+		},
+	  options: {
+			title: {
+				display: true,
+				text: 'Eisenhower Matrix'
+			}
+		}
+	});
 }
 
 </script>
@@ -65,7 +102,9 @@ function delete_item(taskname) {
 <ul id="To_do_list">
 </ul>
 
-<div id="einsenhower"></div> 
+<div id="einsenhower">
+	<canvas id="matrix" style="width:100%;max-width:700px"></canvas>
+</div> 
 
 <p id="credits"> Created by your beloved HP </p>
 </body>
