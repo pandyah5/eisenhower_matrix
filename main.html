@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"> </script> <!-- Importing Chart.js for plotting matrices -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"> </script> <!-- Importing Chart.js for plotting matrices -->
 
 <script>
 
@@ -53,22 +53,40 @@ function delete_item(taskname) {
 }
 
 function plot_eisenhower_matrix() {
-	// Extract the plot points from data
+	// Extract the plot points and labels from data
 	let plot_data = [];
+	let plot_labels = [];
 	for (const[key, value] of data) {
+		plot_labels.push(key);
 		plot_data.push(value);
+	}
+	
+	// For debug let us print all labels
+	for (const key of plot_labels) {
+		console.log("Label: " + key);
 	}
 
 	// Configure the chart
 	const myChart = new Chart("matrix", {
 	  type: "scatter",
-	  data: {datasets: [{
-			  pointRadius: 4,
-			  pointBackgroundColor: "rgba(0,0,255,1)",
-			  data: plot_data
+	  data: {
+			labels: plot_labels,
+			datasets: [{
+				pointRadius: 4,
+				pointBackgroundColor: "rgba(0,0,255,1)",
+				label: 'Legend',
+				data: plot_data
 			}]
 		},
 	  options: {
+			tooltips: {
+				callbacks: {
+					label: function(tooltipItem, data) {
+					   var label = data.labels[tooltipItem.index];
+					   return label + ': (' + tooltipItem.xLabel + ', ' + tooltipItem.yLabel + ')';
+					}
+				}
+			},
 			title: {
 				display: true,
 				text: 'Eisenhower Matrix'
@@ -86,6 +104,11 @@ function plot_eisenhower_matrix() {
 						min: -5
 					}
 				}]
+			},
+			elements: {
+				point: {
+					pointStyle: 'circle'
+				}
 			}
 		}
 	});
